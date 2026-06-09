@@ -14,49 +14,32 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Ejercicio2Screen() {
-    // 1. Estado booleano para alternar entre dos colores
     var isBlue by remember { mutableStateOf(true) }
 
-    // 2. Transición suave de color usando animateColorAsState
     val animatedColor by animateColorAsState(
-        targetValue = if (isBlue) Color(0xFF2196F3) else Color(0xFF4CAF50), // Azul a Verde
-        animationSpec = tween(durationMillis = 600), // Duración de la transición
+        targetValue = if (isBlue) Color(0xFF2196F3) else Color(0xFF4CAF50),
+        animationSpec = tween(durationMillis = 600),
         label = "ColorAnimation"
     )
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Barra superior simulada para proteger los iconos del teléfono
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = { isBlue = !isBlue }) {
+            Text("Cambiar Color")
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .windowInsetsTopHeight(WindowInsets.statusBars)
-                .background(Color(0xFF202124))
+                .size(120.dp)
+                .background(animatedColor)
         )
-
-        // Contenido del Ejercicio 2
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onClick = { isBlue = !isBlue }) {
-                Text("Cambiar Color")
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Cuadro que cambia de color suavemente
-            Box(
-                modifier = Modifier
-                    .size(120.dp)
-                    .background(animatedColor)
-            )
-        }
     }
 }

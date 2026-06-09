@@ -1,4 +1,4 @@
-package com.example.laboratorio13 // Ajusta este paquete al tuyo
+package com.example.laboratorio13 // Ajusta a tu paquete
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -17,45 +17,30 @@ import androidx.compose.ui.unit.dp
 fun Ejercicio1Screen() {
     var isVisible by remember { mutableStateOf(true) }
 
-    // Usamos un Column principal para estructurar la barra simulada y el contenido
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // TRUCO: Creamos una barra superior artificial con el color de fondo para resaltar la batería y hora
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .windowInsetsTopHeight(WindowInsets.statusBars) // Toma el tamaño exacto de la barra del teléfono
-                .background(Color(0xFF202124)) // Gris oscuro estilo Android moderno
-        )
+        Spacer(modifier = Modifier.height(20.dp))
 
-        // Contenido original del ejercicio (ahora empujado hacia abajo de forma segura)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Button(onClick = { isVisible = !isVisible }) {
+            Text(if (isVisible) "Ocultar Cuadro" else "Mostrar Cuadro")
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onClick = { isVisible = !isVisible }) {
-                Text(if (isVisible) "Ocultar Cuadro" else "Mostrar Cuadro")
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(Color.Red)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(Color.Red)
+            )
         }
     }
 }
