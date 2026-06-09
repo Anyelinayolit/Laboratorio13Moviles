@@ -4,23 +4,24 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 1. Definición de los tres estados requeridos
 enum class ScreenState { CARGANDO, CONTENIDO, ERROR }
 
 @Composable
 fun Ejercicio4Screen() {
-    // Estado inicial que arranca en CARGANDO
     var currentState by remember { mutableStateOf(ScreenState.CARGANDO) }
 
     Column(
@@ -30,53 +31,96 @@ fun Ejercicio4Screen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(20.dp))
-        Text("Selector de Estados", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
+        Text("Selector de Estados Avanzado", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(20.dp))
 
-        // Botonera para alternar de forma interactiva entre estados
+        // Botonera estilizada
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = { currentState = ScreenState.CARGANDO }) { Text("Cargando") }
-            Button(onClick = { currentState = ScreenState.CONTENIDO }) { Text("Contenido") }
+            Button(
+                onClick = { currentState = ScreenState.CARGANDO },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE))
+            ) { Text("Cargando") }
+
+            Button(
+                onClick = { currentState = ScreenState.CONTENIDO },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+            ) { Text("Contenido") }
+
             Button(
                 onClick = { currentState = ScreenState.ERROR },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
-            ) {
-                Text("Error", color = Color.White)
-            }
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF44336))
+            ) { Text("Error") }
         }
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // 2. Componente AnimatedContent para manejar las transiciones de estados
+        // MEJORA: Transición combinada de desvanecimiento + deslizamiento vertical (slide)
         AnimatedContent(
             targetState = currentState,
             transitionSpec = {
-                // 3. Efectos personalizados de entrada y salida con tiempos de 500ms
-                fadeIn(animationSpec = tween(500)) togetherWith fadeOut(animationSpec = tween(500))
+                (fadeIn(animationSpec = tween(400)) + slideInVertically(animationSpec = tween(400)) { it / 2 }) togetherWith
+                        (fadeOut(animationSpec = tween(400)) + slideOutVertically(animationSpec = tween(400)) { -it / 2 })
             },
             label = "StateTransitionAnimation"
         ) { state ->
-            // Contenedor visual diferente para cada mensaje en pantalla
-            Box(
+            // Contenedor visual mejorado con bordes redondeados y sombra aparente
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
-                    .background(Color(0xFFF5F5F5))
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFFF5F5F7))
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 when (state) {
                     ScreenState.CARGANDO -> {
-                        Text("⏳ Cargando datos desde el servidor...", fontSize = 16.sp, color = Color.Gray)
+                        // MEJORA: Componente animado nativo que simula una carga real continua
+                        CircularProgressIndicator(
+                            color = Color(0xFF6200EE),
+                            strokeWidth = 4.dp,
+                            modifier = Modifier.size(44.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "⏳ Conectando con el servidor remoto...",
+                            fontSize = 15.sp,
+                            color = Color.Gray,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                     ScreenState.CONTENIDO -> {
-                        Text("✅ ¡Éxito! El contenido se cargó correctamente.", fontSize = 16.sp, color = Color(0xFF388E3C), fontWeight = FontWeight.Medium)
+                        Text(
+                            text = "🚀 ¡Datos Sincronizados!",
+                            fontSize = 18.sp,
+                            color = Color(0xFF2E7D32),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "La lista de elementos se ha actualizado de manera exitosa.",
+                            fontSize = 14.sp,
+                            color = Color.DarkGray,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
                     }
                     ScreenState.ERROR -> {
-                        Text("❌ Error: No se pudo establecer conexión.", fontSize = 16.sp, color = Color(0xFFD32F2F), fontWeight = FontWeight.Medium)
+                        Text(
+                            text = "💥 Error de Conexión",
+                            fontSize = 18.sp,
+                            color = Color(0xFFC62828),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Código de error: 503. Por favor, intente nuevamente.",
+                            fontSize = 14.sp,
+                            color = Color.DarkGray
+                        )
                     }
                 }
             }
