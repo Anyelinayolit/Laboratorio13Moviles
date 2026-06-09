@@ -42,26 +42,33 @@ class MainActivity : ComponentActivity() {
                             NavigationBarItem(
                                 selected = selectedTab == 0,
                                 onClick = { selectedTab = 0 },
-                                label = { Text("Ejercicio 1") },
+                                label = { Text("Ej 1") },
                                 icon = { Text("1️⃣") }
                             )
                             NavigationBarItem(
                                 selected = selectedTab == 1,
                                 onClick = { selectedTab = 1 },
-                                label = { Text("Ejercicio 2") },
+                                label = { Text("Ej 2") },
                                 icon = { Text("2️⃣") }
                             )
                             NavigationBarItem(
                                 selected = selectedTab == 2,
                                 onClick = { selectedTab = 2 },
-                                label = { Text("Ejercicio 3") },
+                                label = { Text("Ej 3") },
                                 icon = { Text("3️⃣") }
                             )
                             NavigationBarItem(
                                 selected = selectedTab == 3,
                                 onClick = { selectedTab = 3 },
-                                label = { Text("Ejercicio 4") },
+                                label = { Text("Ej 4") },
                                 icon = { Text("4️⃣") }
+                            )
+                            // AGREGADO: Nuevo botón para el prototipo del Videojuego
+                            NavigationBarItem(
+                                selected = selectedTab == 4,
+                                onClick = { selectedTab = 4 },
+                                label = { Text("Juego") },
+                                icon = { Text("🎮") }
                             )
                         }
                     }
@@ -76,6 +83,8 @@ class MainActivity : ComponentActivity() {
                             1 -> Ejercicio2Screen()
                             2 -> Ejercicio3Screen()
                             3 -> Ejercicio4Screen()
+                            // AGREGADO: Enlace a la pantalla del Ejercicio Final
+                            4 -> VideojuegoPrototipoScreen()
                         }
                     }
                 }
