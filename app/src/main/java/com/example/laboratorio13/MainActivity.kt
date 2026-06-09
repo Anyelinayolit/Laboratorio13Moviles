@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                         when (selectedTab) {
                             0 -> Ejercicio1Screen()
                             1 -> Ejercicio2Screen()
-                            2 -> Text("Próximamente: Ejercicio 3")
+                            2 -> Ejercicio3Screen() // Reemplazamos el texto por la pantalla real
                             3 -> Text("Próximamente: Ejercicio 4")
                         }
                     }
