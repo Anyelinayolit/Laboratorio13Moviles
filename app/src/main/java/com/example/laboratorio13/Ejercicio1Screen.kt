@@ -15,34 +15,47 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Ejercicio1Screen() {
-    // 1. Estado para controlar si el cuadro es visible o no
     var isVisible by remember { mutableStateOf(true) }
 
+    // Usamos un Column principal para estructurar la barra simulada y el contenido
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        // 2. Botón que altera el estado al hacer clic
-        Button(onClick = { isVisible = !isVisible }) {
-            Text(if (isVisible) "Ocultar Cuadro" else "Mostrar Cuadro")
-        }
+        // TRUCO: Creamos una barra superior artificial con el color de fondo para resaltar la batería y hora
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsTopHeight(WindowInsets.statusBars) // Toma el tamaño exacto de la barra del teléfono
+                .background(Color(0xFF202124)) // Gris oscuro estilo Android moderno
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 3. Componente de animación que reacciona al estado 'isVisible'
-        AnimatedVisibility(
-            visible = isVisible,
-            enter = fadeIn(),  // Efecto de entrada suave
-            exit = fadeOut()   // Efecto de salida suave
+        // Contenido original del ejercicio (ahora empujado hacia abajo de forma segura)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Elemento animado
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(Color.Red)
-            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(onClick = { isVisible = !isVisible }) {
+                Text(if (isVisible) "Ocultar Cuadro" else "Mostrar Cuadro")
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            AnimatedVisibility(
+                visible = isVisible,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(Color.Red)
+                )
+            }
         }
     }
 }
